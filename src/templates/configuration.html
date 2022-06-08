@@ -141,10 +141,32 @@
                             <label class="custom-control-label" for="bulk_add"><strong>Add Peers by bulk</strong></label>
                             <i class="bi bi-question-circle-fill" style="cursor: pointer" data-container="body" data-toggle="popover" data-placement="right" data-trigger="click" data-content="By adding peers by bulk, each peer's name will be auto generated, and Allowed IP will be assign to the next available IP."></i>
                         </div>
-                        <div class="form-group" style="margin: 0">
-                            <input type="number" class="form-control" id="new_add_amount" min="1" placeholder="Amount" disabled>
-                            <div id="bulk_amount_validation" class="invalid-feedback"></div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="random" id="bulkdddradio_random" name="randomlistRadio" disabled checked>
+                                <label class="form-check-label" for="flexCheckDisabled">
+                                    Random Name
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" value="list" id="bulkdddradio_list" name="randomlistRadio" disabled>
+                                <label class="form-check-label" for="flexCheckDisabled">
+                                    Import list
+                                </label>
+                            </div>
                         </div>
+                        <div class="form-group col">
+                            <div class="form-group row-cols-12" style="margin: 0">
+                                <label for="new_add_amount">Amount</label>
+                                <input type="number" class="form-control" id="new_add_amount" min="1" placeholder="Amount" disabled>
+                                <div id="bulk_amount_validation" class="invalid-feedback"></div>
+                            </div>
+                            <div class="row-cols-12 form-group">
+                                <label for="uploadConfigFile">List config name (separate by CLRF)</label>
+                                <textarea class="form-control" id="uploadConfigFile" disabled rows="3"></textarea>
+                            </div>
+                        </div>
+
 
                     </div>
                     <hr>

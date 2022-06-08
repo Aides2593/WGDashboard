@@ -1085,17 +1085,24 @@ def add_peer_bulk(config_name):
     @return: String
     """
     data = request.get_json()
+    print(data)
     keys = data['keys']
     endpoint_allowed_ip = data['endpoint_allowed_ip']
     dns_addresses = data['DNS']
     enable_preshared_key = data["enable_preshared_key"]
+    name_list = data['list'].split('\n')
+    print(f"len name_list = {len(name_list)}")
     amount = data['amount']
     config_interface = read_conf_file_interface(config_name)
     if "Address" not in config_interface:
         return "Configuration must have an IP address."
-    if not amount.isdigit() or int(amount) < 1:
+    if len(name_list) < 1 and not amount.isdigit() and int(amount) < 1:
         return "Amount must be integer larger than 0"
-    amount = int(amount)
+    if amount == '':
+        amount = len(name_list)
+    else:
+        amount = int(amount)
+    print(amount)
     if not check_DNS(dns_addresses):
         return "DNS formate is incorrect. Example: 1.1.1.1"
     if not check_Allowed_IPs(endpoint_allowed_ip):
@@ -1110,7 +1117,11 @@ def add_peer_bulk(config_name):
     wg_command = ["wg", "set", config_name]
     sql_command = []
     for i in range(amount):
-        keys[i]['name'] = f"{config_name}_{datetime.now().strftime('%m%d%Y%H%M%S')}_Peer_#_{(i + 1)}"
+        print(f"i={i}")
+        if len(name_list) > 0:
+            keys[i]['name'] = f"{config_name}_{datetime.now().strftime('%Y%m%d%H%M%S')}_{name_list[i]}"
+        else:
+            keys[i]['name'] = f"{config_name}_{datetime.now().strftime('%m%d%Y%H%M%S')}_Peer_#_{(i + 1)}"
         wg_command.append("peer")
         wg_command.append(keys[i]['publicKey'])
         keys[i]['allowed_ips'] = ips.pop(0)
@@ -1718,4 +1729,4 @@ if __name__ == "__main__":
     app_port = config.get("Server", "app_port")
     WG_CONF_PATH = config.get("Server", "wg_conf_path")
     config.clear()
-    app.run(host=app_ip, debug=False, port=app_port)
+    app.run(host=app_ip, debug=True, port=app_port)

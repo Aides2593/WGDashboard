@@ -154,13 +154,23 @@
         let $new_add_keep_alive = $("#new_add_keep_alive");
         let $enable_preshare_key = $("#enable_preshare_key");
         let data_list = [$new_add_DNS, $new_add_endpoint_allowed_ip,$new_add_MTU, $new_add_keep_alive];
-        if ($new_add_amount.val() > 0 && !$new_add_amount.hasClass("is-invalid")){
+        let $uploadConfigFile = $('#uploadConfigFile');
+        if (($new_add_amount.val() > 0 || $('#bulkdddradio_list').prop('checked')) && !$new_add_amount.hasClass("is-invalid")){
             if ($new_add_DNS.val() !== "" && $new_add_endpoint_allowed_ip.val() !== ""){
                 let conf = $add_peer.getAttribute('conf_id');
                 let keys = [];
-                for (let i = 0; i < $new_add_amount.val(); i++) {
-                    keys.push(window.wireguard.generateKeypair());
+                if ($new_add_amount.val() > 1){
+                    for (let i = 0; i < $new_add_amount.val(); i++) {
+                        keys.push(window.wireguard.generateKeypair());
+                    }
+                }else{
+                    len = $uploadConfigFile.val().split('\n').length
+                    console.log(len)
+                    for (let i = 0; i < len; i++) {
+                        keys.push(window.wireguard.generateKeypair());
+                    }
                 }
+
                 $.ajax({
                     method: "POST",
                     url: "/add_peer_bulk/"+conf,
@@ -174,7 +184,8 @@
                         "keep_alive": $new_add_keep_alive.val(),
                         "enable_preshared_key": $enable_preshare_key.prop("checked"),
                         "keys": keys,
-                        "amount": $new_add_amount.val()
+                        "amount": $new_add_amount.val(),
+                         "list": $uploadConfigFile.val()
                     }),
                     success: function (response){
                         if(response !== "true"){
@@ -615,6 +626,10 @@ $("#peer_name_textbox").on("keyup", function(){
 $add_peer.addEventListener("click",function(){
     let $bulk_add = $("#bulk_add");
     if ($bulk_add.prop("checked")){
+        // let $randomRadio = $("#randomRadio");
+        // let $importlistRadio = $("#importlistRadio");
+        // $randomRadio.removeAttribute('disabled');
+        // $importlistRadio.removeAttribute('disabled');
         if (!$("#new_add_amount").hasClass("is-invalid")){
            window.configurations.addPeersByBulk();
         }
@@ -712,11 +727,22 @@ $("#new_add_amount").on("keyup", function(){
 $("#bulk_add").on("change", function (){
     let hide = $(".non-bulk").find("input");
     let amount = $("#new_add_amount");
+    let $randomRadio = $("#bulkdddradio_random");
+    let $importlistRadio = $("#bulkdddradio_list");
+    let $uploadConfigFile = $('#uploadConfigFile');
     if ($(this).prop("checked") === true){
         for(let i = 0; i < hide.length; i++){
             $(hide[i]).attr("disabled", "disabled");
         }
-        amount.removeAttr("disabled");
+        $randomRadio.removeAttr("disabled");
+        $importlistRadio.removeAttr("disabled");
+        if ($randomRadio.prop("checked")){
+            amount.removeAttr("disabled");
+        }
+        if ($importlistRadio.prop("checked")){
+            $uploadConfigFile.removeAttr('disabled');
+        }
+
     }
     else{
         for(let i = 0; i < hide.length; i++){
@@ -725,10 +751,24 @@ $("#bulk_add").on("change", function (){
             }
         }
         amount.attr("disabled", "disabled");
+        $randomRadio.attr("disabled", "disabled");
+        $importlistRadio.attr("disabled", "disabled");
+        $uploadConfigFile.attr("disabled", "disabled");
     }
 });
-
-
+$(document).on('change', 'input:radio[id^="bulkdddradio_"]', function (event) {
+   let value = $(this).val();
+   let $amount = $('#new_add_amount');
+   let $uploadConfigFile = $('#uploadConfigFile');
+   if (value === 'random'){
+       $amount.removeAttr('disabled');
+       $uploadConfigFile.attr('disabled', 'disabled');
+   }
+   else {
+       $amount.attr('disabled', 'disabled');
+       $uploadConfigFile.removeAttr('disabled');
+   }
+});
 /**
  * =======================
  * Available IP Related
