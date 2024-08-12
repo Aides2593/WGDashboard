@@ -1,9 +1,21 @@
-##### Beta testing on v3.1
-If anyone would love to try out the beta version of v3.1, you can do the following. Let me know if you encountered any issues. ;)
-```
-git clone -b v3.1-dev https://github.com/donaldzou/WGDashboard.git wgdashboard
-```
-> Please note that I still do push on this branch, and it might crash or not finish yet on some functionality ;)
+### Development on v4
+Hi Everyone, I've decided to promote the long time working `v3.1` to `v4`! This version will be a huge update on the structure of the app. The frontend will be completely handle on the client side with Vue.js, and communicate with the server via REST Api. With this design, it could be possible for the frontend app to connect to multiple server in the future. Stay tune to this new verion, I'm working very hard on this while balancing school and work. If you would like know whats going on, you can check out [this branch](https://github.com/donaldzou/WGDashboard/tree/v4) 😊
+
+> For more information, you can visit: https://github.com/donaldzou/WGDashboard/issues/293
+
+> If you're interested in the Desktop App of v4.0, please visit [WGDashboard Desktop](https://github.com/donaldzou/WGDashboard-Desktop) ;)
+
+#### A preview on v4.0 🥹
+
+<img src="https://github.com/donaldzou/WGDashboard/raw/main/img/v4.0Preview.gif">
+
+> Working example of API Key and CORS ;)
+
+<img src="https://github.com/donaldzou/WGDashboard/raw/main/img/ScreenRecording2024-07-31at2.16.15AM-ezgif.com-video-to-gif-converter.gif">
+
+
+<hr>
+
 ##### Known issue on WGDashboard `v3.0 - v3.0.6`
 - [IPv6 in WireGuard might not fully support.](https://github.com/donaldzou/WGDashboard/issues/167)
 <hr>
@@ -101,7 +113,8 @@ git clone -b v3.1-dev https://github.com/donaldzou/WGDashboard.git wgdashboard
 - **WireGuard** and **WireGuard-Tools (`wg-quick`)**  are installed.
 
   > Don't know how? Check this <a href="https://www.wireguard.com/install/">official documentation</a>
-
+- Net Tools (`net-tools`) is installed.
+  - You can verify this by checking if `ifconfig` return a list of network interface. Such as `eth0`
 - Configuration files under **`/etc/wireguard`**, but please note the following sample
 
   ```ini
@@ -126,7 +139,7 @@ git clone -b v3.1-dev https://github.com/donaldzou/WGDashboard.git wgdashboard
 1. Download WGDashboard
 
    ```shell
-   git clone -b v3.0.6 https://github.com/donaldzou/WGDashboard.git wgdashboard
+   git clone -b v3.0.6.2 https://github.com/donaldzou/WGDashboard.git wgdashboard
    
 2. Open the WGDashboard folder
 
@@ -565,7 +578,8 @@ Bug Fixed:
   - [jQuery](https://jquery.com) `v3.5.1`
 - Python
   - [Flask](https://pypi.org/project/Flask/) `v2.0.1`
-  - [ifcfg](https://pypi.org/project/ifcfg/) `v0.21`
+  - [ifcfg](https://pypi.org/project/ifcfg/) `v0.24`
+  - [psutil](https://pypi.org/project/psutil/) `v5.9.8`
   - [icmplib](https://pypi.org/project/icmplib/) `v2.1.1`
   - [flask-qrcode](https://pypi.org/project/Flask-QRcode/) `v3.0.0`
 
